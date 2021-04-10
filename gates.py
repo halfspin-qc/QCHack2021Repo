@@ -46,10 +46,9 @@ shots = 1000
 counts = execute(qc_output,Aer.get_backend('qasm_simulator'),shots=shots).result().get_counts()
 
 #### 
-counts = result.get_counts()
-probs00 = counts.get('00') /counts
-probs01 = counts.get('01') /counts
-probs10 = counts.get('10') /counts
-probs11 = counts.get('11') /counts
+probs00 = counts.get('00') /shots
+probs01 = counts.get('01') /shots
+probs10 = counts.get('10') /shots
+probs11 = counts.get('11') /shots
 
 plot_histogram(counts)
