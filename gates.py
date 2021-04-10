@@ -51,3 +51,5 @@ probs00 = counts.get('00') /counts
 probs01 = counts.get('01') /counts
 probs10 = counts.get('10') /counts
 probs11 = counts.get('11') /counts
+
+plot_histogram(counts)
