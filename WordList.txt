@@ -1,0 +1,16 @@
+Level	Word
+Easy	Vector
+Easy	Linear
+Easy	Algebra
+Easy	Quantum
+Easy	Computing
+Medium	Qiskit
+Medium	Simulator
+Medium	Superposition
+Medium	Entanglement
+Medium	Interference
+Hard	Statevector
+Hard	ToffolliGate
+Hard	HadamardGate
+Hard	Cryptography
+Hard	MachineLearning
