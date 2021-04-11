@@ -4,12 +4,12 @@ Welcome! This is a repository for QCHack 2021
 
 The members are:
 - Sarang Brahme
-- Louis Wu
+- Ming-Tsung Wu
 - Gerardo Suarez
 - Deb Prakash C
 - Yen-Chen Wu
 
-Quantum Guesser is a quantum-based game similar to hangman. 
+Rescue Schrödinger ’s Cat is a quantum-based game similar to hangman. 
 
 # How to play
 
