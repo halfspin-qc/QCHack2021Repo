@@ -17,9 +17,11 @@ def ansatz(ansatzList,theta=3.1415):
             p0=int(gate[1])
             p1=int(gate[2])
             circuit.cx(q[p0], q[p1])
+        """   
         if gate[0]=='R':
             p=int(gate[1])
             circuit.rx(theta, q[p])
+             """
         if gate[0]=='Y':
             p=int(gate[1])
             circuit.y(q[p])
@@ -37,9 +39,9 @@ def ansatz(ansatzList,theta=3.1415):
 
 
 
-def get_expectation(theta, ansatzList):
+def get_expectation(ansatzList, theta=3.1415):
 
-    circuit = ansatz(theta,ansatzList)
+    circuit = ansatz(ansatzList, theta)
     
     shots = 10000 
     backend = BasicAer.get_backend('qasm_simulator')
@@ -49,16 +51,13 @@ def get_expectation(theta, ansatzList):
         
     return counts
 
-
-def comparison(theta,ansatzList):
-
-
-    estimate=get_expectation(theta,ansatzList)
-
-    for i in estimate:
-        if i<0.8:
-            print('You have another chance')
+def comparison(ansatzList,theta=3.1415):
+    estimate=get_expectation(ansatzList,theta)
+    total=sum(estimate.values())
+    if '11' in estimate.keys():
+        if (estimate['11']/total)>0.4:
             return True
         else:
-            print('You have lost, could have survived if you studied more about basic gate operations =(')
+            return False
+    else:
         return False
