@@ -21,7 +21,9 @@ pygame.init()
 
 pygame.display.set_caption("Hangman")
 
-
+bg = 'logo.png'
+bg = pygame.image.load(bg)
+bg = pygame.transform.scale(bg, (500, 500))
 gates = ['X0', 'Y0', 'Z0', 'H0', 'C01', 'X1', 'Y1', 'Z1', 'H1', 'C10']
 gateslist=[]
 #32 bit display
@@ -38,8 +40,12 @@ Color = ["BLACK","WHITE","RED","GREEN","BLUE","GREY"]
 
 Font = pygame.font.Font("freesansbold.ttf",33)
 Font2 = pygame.font.Font("freesansbold.ttf",20)
+font = pygame.font.Font("freesansbold.ttf", 36)
 
 Display.fill(WHITE)
+display_width = 500
+display_height = 500
+
 
 def randomNum(choice):
     RandomNum = 0
@@ -86,6 +92,7 @@ def Hangman(condition):
 def PreHangMan():
     qc=ansatz([])
     qc.draw('mpl').savefig('initial.png')
+    qc.draw('mpl').savefig('current.png')
     img = pygame.image.load('initial.png')
     img = pygame.transform.scale(img, (150, 150))
     Display.blit(img, (50,180))
@@ -98,6 +105,177 @@ def StartScreen():
     Display.blit(Font2.render("1- Easy",True,BLACK), (200,200))
     Display.blit(Font2.render("2- Medium",True,BLACK), (200,250))
     Display.blit(Font2.render("3- Hard",True,BLACK), (200,300))
+
+class Button(object):
+    def __init__(self, text, color, x=None, y=None, **kwargs):
+        self.surface = font.render(text, True, color)
+
+        self.WIDTH = self.surface.get_width()
+        self.HEIGHT = self.surface.get_height()
+
+        if 'centered_x' in kwargs and kwargs['centered_x']:
+            self.x = display_width // 2 - self.WIDTH // 2
+        else:
+            self.x = x
+
+        if 'centered_y' in kwargs and kwargs['cenntered_y']:
+            self.y = display_height // 2 - self.HEIGHT // 2
+        else:
+            self.y = y
+
+    def display(self):
+        Display.blit(self.surface, (self.x, self.y))
+
+    def check_click(self, position):
+        x_match = position[0] > self.x and position[0] < self.x + self.WIDTH
+        y_match = position[1] > self.y and position[1] < self.y + self.HEIGHT
+
+        if x_match and y_match:
+            return True
+        else:
+            return False
+
+def gate_choose():
+    Display.fill(WHITE)
+    img = pygame.image.load('current.png')
+    img = pygame.transform.scale(img, (400, 200))
+    Display.blit(img, (50, 20))
+
+    img = pygame.image.load('histogram.png')
+    img = pygame.transform.scale(img, (500, 200))
+    Display.blit(img, (500, 20))
+
+    pygame.display.update()  # update the display
+    game_title = font.render('Which gate would you like to choose?', True, RED)
+
+    Display.blit(game_title, (display_width // 2 - game_title.get_width() // 2, 250))
+    left = 200
+    H_button = Button('H', WHITE, left, 50)
+    X_button = Button('X', WHITE, left, 400)
+    Y_button = Button('Y', WHITE, left, 450)
+    Z_button = Button('Z', WHITE, None, 350, centered_x=True)
+    CNOT1_button = Button('CX10', WHITE, None, 400, centered_x=True)
+    CNOT_button = Button('CX01', WHITE, None, 450, centered_x=True)
+    DONE_button = Button('DONE', WHITE, None, 500, centered_x=True)
+
+    H_button.display()
+    X_button.display()
+    Z_button.display()
+    Y_button.display()
+    CNOT1_button.display()
+    CNOT_button.display()
+    DONE_button.display()
+
+    pygame.display.update()
+    while True:
+
+        if H_button.check_click(pygame.mouse.get_pos()):
+            H_button = Button('H', RED, left, 350)
+        else:
+            H_button = Button('H', WHITE, left, 350)
+
+        if X_button.check_click(pygame.mouse.get_pos()):
+            X_button = Button('X', RED, left, 400)
+        else:
+            X_button = Button('X', WHITE, left, 400)
+
+        if Y_button.check_click(pygame.mouse.get_pos()):
+            Y_button = Button('Y', RED, left, 450)
+        else:
+            Y_button = Button('Y', WHITE, left, 450)
+
+        if Z_button.check_click(pygame.mouse.get_pos()):
+            Z_button = Button('Z', RED, None, 350, centered_x=True)
+        else:
+            Z_button = Button('Z', WHITE, None, 350, centered_x=True)
+
+        if CNOT1_button.check_click(pygame.mouse.get_pos()):
+            CNOT1_button = Button('CX10', RED, None, 400, centered_x=True)
+        else:
+            CNOT1_button = Button('CX10', WHITE, None, 400, centered_x=True)
+        if CNOT_button.check_click(pygame.mouse.get_pos()):
+            CNOT_button = Button('CX01', RED, None, 450, centered_x=True)
+        else:
+            CNOT_button = Button('CX01', WHITE, None, 450, centered_x=True)
+
+        if DONE_button.check_click(pygame.mouse.get_pos()):
+            DONE_button = Button('DONE', RED, None, 500, centered_x=True)
+        else:
+            DONE_button = Button('DONE', WHITE, None, 500, centered_x=True)
+
+        H_button.display()
+        X_button.display()
+        Y_button.display()
+        Z_button.display()
+        CNOT1_button.display()
+        CNOT_button.display()
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                raise SystemExit
+        if pygame.mouse.get_pressed()[0]:
+            if H_button.check_click(pygame.mouse.get_pos()):
+                return 'H'
+                break
+            if X_button.check_click(pygame.mouse.get_pos()):
+                return "X"
+                break
+            if Y_button.check_click(pygame.mouse.get_pos()):
+                return "Y"
+                break
+            if Z_button.check_click(pygame.mouse.get_pos()):
+                return "Z"
+                break
+            if CNOT1_button.check_click(pygame.mouse.get_pos()):
+                return "C10"
+                break
+            if CNOT_button.check_click(pygame.mouse.get_pos()):
+                return "C01"
+                break
+         
+
+def qubit_choose():
+    Display.fill(WHITE)
+    game_title = font.render('Which qubit would you like to apply that gate on?', True, RED)
+
+    Display.blit(game_title, (display_width // 2 - game_title.get_width() // 2, 250))
+    zero_button = Button('0', WHITE, None, 350, centered_x=True)
+    one_button = Button('1', WHITE, None, 400, centered_x=True)
+
+    zero_button.display()
+    one_button.display()
+
+    pygame.display.update()
+    while True:
+
+        if zero_button.check_click(pygame.mouse.get_pos()):
+            zero_button = Button('0', RED, None, 350, centered_x=True)
+        else:
+            zero_button = Button('0', WHITE, None, 350, centered_x=True)
+
+        if one_button.check_click(pygame.mouse.get_pos()):
+            one_button = Button('1', RED, None, 400, centered_x=True)
+        else:
+            one_button = Button('1', WHITE, None, 400, centered_x=True)
+
+        zero_button.display()
+        one_button.display()
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                raise SystemExit
+        if pygame.mouse.get_pressed()[0]:
+            if zero_button.check_click(pygame.mouse.get_pos()):
+                return '0'
+                break
+            if one_button.check_click(pygame.mouse.get_pos()):
+                return '1'
+                break
+
           
 def main():
     BLACK = (0,0,0)
@@ -260,10 +438,14 @@ def main():
                                 EmptyList[i] = TheWord[i]
 
                     else:
+
                          Condition = Condition + 1
-                         gateslist.append(gates[3])
+                         gate_selected=gate_choose()
+                         qubit_selected=qubit_choose()
+                         gateslist.append(gate_selected+qubit_selected)
                          qc=ansatz(gateslist)
                          qc.draw('mpl').savefig('current.png')
+                         Display.fill(WHITE)
 
                     Hidden = Font.render("".join(EmptyList),True,BLACK)
                     HiddenRect = Hidden.get_rect()
