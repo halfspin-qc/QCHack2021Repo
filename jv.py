@@ -95,12 +95,14 @@ def wordToBV(s) :
     return circuit_array
 
 
-circuit_to_run = wordToBV('Toronto')
+circuit_to_run = wordToBV('Toronto')   # parametrize this word
 
 #run the first letter on a simulator
 backend = BasicAer.get_backend('qasm_simulator')
 shots = 4096
-results = execute(circuit_to_run[0], backend=backend, shots=shots).result()
+results = execute(circuit_to_run[0], backend=backend, shots=shots).result()   # parametrize this index
+# see if following line can be used instead: 
+#results = execute(circuit_to_run, backend=backend, shots=shots).result()
 answer = results.get_counts()
 
 plot_histogram(answer)
